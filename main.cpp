@@ -37,18 +37,27 @@ public:
 
     shared_toy_ptr(): shared_toy_ptr(nullptr) {};
 
+    void inc_count(){
+        if (count != nullptr)
+            *count += 1;
+    }
+
+    void dec_count(){
+        if (count != nullptr)
+            *count -= 1;
+    }
+
+    //конструктор копирования
     shared_toy_ptr(const shared_toy_ptr& oth){
         toy = oth.toy;
-        count = oth.count; //делимся указателем на счетчик
-        if (count != nullptr)
-            *count += 1;       //увеличиваем общий счетчик
+        count = oth.count;     //делимся указателем на счетчик
+        inc_count();       //увеличиваем общий счетчик
     }
 
     shared_toy_ptr& operator= (const shared_toy_ptr& oth){
         if(this == &oth)
             return *this;
-        if (count != nullptr)
-            *count -= 1;
+            dec_count();
         if(use_count() == 0){// удаляем, если больше нет владельцев
             std::cout << "Delete toy " << toy->getName() << std::endl;
             delete toy;
@@ -58,7 +67,7 @@ public:
         }
         toy = oth.toy;
         count = oth.count;
-        *count += 1;
+        inc_count();
 
         return *this;
     }
@@ -77,7 +86,7 @@ public:
 
     ~shared_toy_ptr(){
         if(*count > 0)
-            *count -= 1;
+            dec_count();
         if(*count == 0){
             std::cout << "Delete shared toy " << toy->getName() << std::endl;
             delete toy;
@@ -106,5 +115,5 @@ int main(int, char**){
     std::cout << "Count ptr: "<< ptr1.use_count() << " : " << ptr1->getName() << std::endl;
 
 
-
+    return 0;
 }
