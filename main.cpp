@@ -25,17 +25,6 @@ public:
 class shared_toy_ptr{
     Toy* toy = nullptr;
     int* count = nullptr;
-public:
-    shared_toy_ptr(Toy* _toy){
-        toy = _toy;
-        if(_toy == nullptr){ 
-            count = new int(0);
-        } else {
-            count = new int(1);
-        }
-    }
-
-    shared_toy_ptr(): shared_toy_ptr(nullptr) {};
 
     void inc_count(){
         if (count != nullptr)
@@ -47,6 +36,17 @@ public:
             *count -= 1;
     }
 
+public:
+    shared_toy_ptr(Toy* _toy){
+        toy = _toy;
+        if(_toy == nullptr){ 
+            count = new int(0);
+        } else {
+            count = new int(1);
+        }
+    }
+
+    shared_toy_ptr(): shared_toy_ptr(nullptr) {};
     //конструктор копирования
     shared_toy_ptr(const shared_toy_ptr& oth){
         toy = oth.toy;
